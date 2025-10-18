@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Guess Game</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+            }
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #2a2ac1;
+            }
+            .container {
+                max-width: 500px;
+                margin: 50px auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            h1 {
+                color: #333;
+            }
+            input[type="number"] {
+                width: 80%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #218838;
+            }
+            #result {
+                margin-top: 20px;
+                font-size: 1.2em;
+            }
+            #trials {
+                margin-top: 10px;
+                font-size: 1em;
+                color: #555;
+            }
+            #pa {
+                background-color: #007bff;
+                margin-top: 20px;
+                padding: 10px 20px;
+                cursor: pointer;
+                display: none;
+            }
+            #pa:hover {
+                background-color: #0069d9;
+            }
+
+            @media screen and (max-width: 1280px) {
+                .container {
+                    width: 70%;
+                    margin-top: 25vh;
+                }  
+            }
+            @media screen and (max-width: 912px) {
+                .container {
+                    width: 90%;
+                    margin-top: 30vh;
+                }  
+            }
+
+            @media screen and (max-width: 480px) {
+                .container {
+                    width: 90%;
+                    margin-top: 30vh;
+                    padding: 10px;
+                }
+            }
+        </style>
+        <script>
+            var randomNumber = Math.floor(Math.random() * 100) + 1;
+            function checkGuess() {               
+                var guess = document.getElementById("guessInput").value;
+                var result = document.getElementById("result");
+                if (guess == randomNumber){
+                    result.textContent = "Congratulations! You guessed the correct number: " + randomNumber;
+                    document.getElementById("guessInput").disabled = true;
+                    document.querySelector("button").disabled = true;
+                    document.getElementById("pa").style.display = "inline-block";
+                }
+                else if(guess == "") {
+                    result.textContent = "Please enter a number.";
+                } 
+                else if(guess > 100){
+                    result.textContent = "Please enter a number between 1 and 100.";
+                }
+                else if (guess < randomNumber) {
+                    result.textContent = "The number you guessed is less than the number! Try again.";
+                } 
+                else if (guess > randomNumber) {
+                    result.textContent = "The number you guessed is greater than the number! Try again.";
+                }
+                else {
+                    result.textContent = "Please enter a valid number.";
+                }
+
+                if(guess != ""){
+                    var trials = document.getElementById("trials");
+                    if(!trials.textContent){
+                        trials.textContent = "Number of trials left: 4";
+                    } else {
+                        var currentTrials = parseInt(trials.textContent.split(": ")[1]);
+                        trials.textContent = "Number of trials left: " + (currentTrials - 1);
+                    }
+
+                    if (trials.textContent.split(": ")[1] == "0" && guess != randomNumber) {
+                        result.textContent = "Game Over! The correct number was: " + randomNumber;
+                        document.getElementById("guessInput").disabled = true;
+                        document.querySelector("button").disabled = true;
+                        document.getElementById("pa").style.display = "inline-block";
+                    }
+                }
+
+            }
+            function playagain() {
+                window.location.reload();
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Guess Game</h1>
+            <p>Welcome to the Guess Game! Try to guess the number I'm thinking of between 1 and 100.</p>
+            <input type="number" id="guessInput" placeholder="Enter your guess" min="0" max="100"><br><br>
+            <button onclick="checkGuess()">Submit Guess</button>
+            <p id="result"></p>
+            <p id="trials">Number of trials left: 5</p>
+            <button id="pa" onclick="playagain()">Play Again</button>
+        </div>
+    </body>
+</html>
